@@ -1,24 +1,22 @@
----q1---
-
-SELECT c.CHANNEL_ID, s.PROD_ID, 
-   sum(s.amount_sold) "SALES_TOTAL"
-   FROM  SALES s, channels c 
-   where s.CHANNEL_ID = c.CHANNEL_ID
-   GROUP BY c.CHANNEL_ID, s.PROD_ID;
-
-
-
-
 DROP MATERIALIZED VIEW sales_chan_prod_mv;
 
 drop dimension sales_dim;
 
+---q1---
+
+SELECT CHANNEL_ID, PROD_ID, 
+   sum(amount_sold) "SALES_TOTAL"
+   FROM  SALES 
+   GROUP BY CHANNEL_ID, PROD_ID;
+
+
+
 ---q2---
 create materialized view sales_chan_prod_mv refresh force on demand
-enable query REWRITE as SELECT s.CHANNEL_ID, s.PROD_ID, 
-   sum(s.amount_sold) "SALES_TOTAL"
-   FROM  SALES s
-   GROUP BY s.CHANNEL_ID, s.PROD_ID;
+enable query REWRITE as SELECT CHANNEL_ID, PROD_ID, 
+   sum(amount_sold) "SALES_TOTAL"
+   FROM  SALES 
+   GROUP BY CHANNEL_ID, PROD_ID;
 
 
 
